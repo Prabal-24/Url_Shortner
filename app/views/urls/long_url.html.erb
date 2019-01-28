@@ -1,0 +1,30 @@
+<h1> Show Long URL </h1>
+
+<% if @url.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@url.errors.count, "error") %> prohibited
+        this url from being generated:
+      </h2>
+      <ul>
+        <% @url.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+<% flash.each do |key, value| %>
+  	<div class="alert alert-<%= key %>"><%= value %></div>
+ <%end%>
+
+ <%= form_with scope: :urls, url: '/get_long_url', method: :get, local: true do |form| %> 
+<p>
+    <%= form.label :Short_url %><br>
+    <%= form.text_field :short_url %>
+</p>
+ 
+<p>
+    <%= form.submit "Show Long Url"%>
+</p>
+<% end %>
+<%= link_to 'Back', root_path %>

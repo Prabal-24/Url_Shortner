@@ -1,0 +1,15 @@
+<h2> created</h2>
+
+<p>
+  <strong>Long_url:</strong>
+  <%= link_to @url.long_url , @url.long_url %>
+</p>
+
+ 
+<p>
+  <strong>Short_url:</strong>
+  <%= link_to @url.short_url ,@url.long_url%>
+</p>
+
+
+<%= link_to 'Back','/urls/new' %>

@@ -1,0 +1,23 @@
+<h1>Daily Repot</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Number of Short Urls Generated</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @daily_reports.each do |daily_report| %>
+      <tr>
+        <td><%= daily_report.date %></td>
+        <td><%= daily_report.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Back', root_path %>
