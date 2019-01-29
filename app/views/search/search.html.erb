@@ -1,25 +1,9 @@
 <h1>Elastic Search</h1>
-<%= render 'search/form' %>
-
-<h1>Search Results</h1>
-<% if @urls.any? %>
-  <ul class="search_results">
-    <% @urls.each do |url| %>
-      <li>
-        <p>
-          <strong>Long_url:</strong>
-          <%= url.long_url %>
-        </p>
-
-        <p>
-          <strong>Short_url:</strong>
-          <%=  url.short_url %>
-        </p>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>Your search did not match any Urls.</p>
+<%= form_for :term, url: search_search_result_path, method: :get do |form| %>
+  <p>
+    <%= text_field_tag :term, params[:term] %>
+    <%= submit_tag "Search", name: nil %>
+  </p>
 <% end %>
 <%= link_to 'Back', root_path %>
 

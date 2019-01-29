@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   post 'urls/new' => 'urls#get_short_url'
   get 'get_long_url' => 'urls#get_long_url'
   get 'search' => 'search#search'
-  get 'search/show' => 'search#show'
+  get 'search/search_result' => 'search#search_result'
   require 'sidekiq/web'  
   mount Sidekiq::Web, :at => '/sidekiq'  
 end

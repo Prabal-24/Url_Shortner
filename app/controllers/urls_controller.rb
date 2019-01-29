@@ -13,7 +13,7 @@ class UrlsController < ApplicationController
   end
 
   def get_short_url
-    @url=Url.new
+    @url=Url.new(url_params)
     @url.long_url = NormalizeUrl.process(params[:url][:long_url])
     @url.domain = (Domainatrix.parse(@url.long_url)).domain
     @url_find = Rails.cache.fetch("#{@url.long_url}" , expires_in: 15.minutes) do 
@@ -67,4 +67,8 @@ class UrlsController < ApplicationController
       end
     end
   end
+  private
+    def url_params
+      params.require(:url).permit(:long_url)
+    end  
 end
