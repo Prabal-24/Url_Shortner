@@ -17,14 +17,14 @@
   	<div class="alert alert-<%= key %>"><%= value %></div>
  <%end%>
 
- <%= form_with scope: :urls, url: '/get_long_url', method: :get, local: true do |form| %> 
-<p>
+<%= form_with scope: :urls, url: '/get_long_url', method: :get, local: true do |form| %> 
+  <p>
     <%= form.label :Short_url %><br>
     <%= form.text_field :short_url %>
-</p>
+  </p>
  
-<p>
+  <p>
     <%= form.submit "Show Long Url"%>
-</p>
+  </p>
 <% end %>
 <%= link_to 'Back', root_path %>

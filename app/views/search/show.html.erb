@@ -1,0 +1,23 @@
+
+<h1>Search Results</h1>
+
+<% if @urls.any? %>
+  <ul class="search_results">
+    <% @urls.each do |url| %>
+      <li>
+        <p>
+          <strong>Long_url:</strong>
+          <%= url.long_url %>
+        </p>
+
+        <p>
+          <strong>Short_url:</strong>
+          <%=  url.short_url %>
+        </p>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Your search did not match any Urls.</p>
+<% end %>
+<%= link_to 'Back', root_path %>m
