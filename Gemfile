@@ -72,3 +72,5 @@ gem 'awesome_print', '~> 1.8'
 
 
 gem 'redis-rails'
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'

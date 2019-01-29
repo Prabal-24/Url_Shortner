@@ -37,7 +37,7 @@ class UrlsController < ApplicationController
 	def show
 	end
 
-	def long_url
+	def short_to_long_url
 		flash[:notice]=""
 		@url=Url.new
 	end

@@ -1,6 +1,11 @@
-class Url < ApplicationRecord
-	
+require 'elasticsearch/model'
 
+class Url < ApplicationRecord
+
+	include Elasticsearch::Model
+  	include Elasticsearch::Model::Callbacks
+
+	after_create :start
 	@@array=[]
 	@@max=0
 	@@lot=0
@@ -22,7 +27,6 @@ class Url < ApplicationRecord
 			response = @url.short_url  
 			@url_find = Url.find_by :domain => @url.domain, :long_url => @url.long_url
 			Rails.cache.write("#{@url.long_url}" ,@url_find  )
-			DailyReport.increment_today_count 
 		else
 			response = "invalid url"
 		end	
@@ -66,5 +70,9 @@ class Url < ApplicationRecord
 		end	
 		key_base_64.reverse!
 		return key_base_64
+	end
+
+	def start
+		CounterWorker.perform_async
 	end
 end
