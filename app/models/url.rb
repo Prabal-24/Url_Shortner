@@ -10,8 +10,8 @@ class Url < ApplicationRecord
   @@max=0
   @@lot=0
   validates :long_url, presence: true, on: :create
-  validates :short_url, uniqueness: true, presence: true
-  validates :long_url, uniqueness: true, presence: true
+  #validates :short_url, uniqueness: true, presence: true
+  #validates :long_url, uniqueness: true, presence: true
   validates_format_of :long_url,
   with: /\A(?:(?:http|https):\/\/*)?([-a-zA-Z0-9.]{2,256}\.[a-z]{2,4})\b(?:\/[-a-zA-Z0-9@,!:%_\+.~#?&\/\/=]*)?\z/
 
@@ -30,7 +30,7 @@ class Url < ApplicationRecord
       response = "invalid url"
     end 
       return response
-    end
+  end
 
     
 
