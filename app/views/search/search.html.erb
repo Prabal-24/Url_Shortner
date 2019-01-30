@@ -1,6 +1,7 @@
 <h1>Elastic Search</h1>
 <%= form_for :term, url: search_search_result_path, method: :get do |form| %>
   <p>
+    
     <%= text_field_tag :term, params[:term] %>
     <%= submit_tag "Search", name: nil %>
   </p>
