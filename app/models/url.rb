@@ -59,7 +59,24 @@ class Url < ApplicationRecord
       end
     end
   end
-  
+
+  def self.custom_search(params)
+   field = params[:field]+".trigram"
+   query = params[:term]
+   urls = self.__elasticsearch__.search(
+   {
+    query: {
+      bool: {
+        must: [{
+          term: {
+            "#{field}":"#{query}"
+          }
+        }]
+       }
+      }
+    }).records
+    return urls
+  end
 
 
 
@@ -70,15 +87,10 @@ class Url < ApplicationRecord
     url_hash = self.generate_short_url(long_url)
     @domain = Domain.find_by :domain_name => @url.domain
     short_domain = @domain.nil? ? "www.othrs.com/" : @domain.short_domain
-    @url.short_url = short_domain + url_hash
+    @url.short_url = short_domain + "/" + url_hash
     if @url.save!  
-      response = @url.short_url  
-      @url_find = Url.find_by :domain => @url.domain, :long_url => @url.long_url
-      Rails.cache.write("#{@url.long_url}" ,@url_find  )
-    else
-      response = "invalid url"
-    end 
-      return response
+      return @url
+    end
   end
 
 
