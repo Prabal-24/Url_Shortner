@@ -7,7 +7,6 @@ class UrlsController < ApplicationController
   **Author:** Prabal Partap <br/>
   **Request Type:** GET <br/>
   **Route :**/urls <br/>
-  
 =end  
   def index
   end
@@ -15,20 +14,29 @@ class UrlsController < ApplicationController
   **Author:** Prabal Partap <br/>
   **Request Type:** GET <br/>
   **Route :**/urls/new <br/>
-
 =end 
   def new
-    flash[:notice]=""
-    @url=Url.new 
+    if(user_signed_in?)
+      @url=Url.new 
+    else
+      redirect_to root_path
+    end
   end
 =begin
   **Author:** Prabal Partap <br/>
+  **Common-Name:** Process api post request for converting long url to short url
+  **End-points:** Other services
   **Request Type:** POST <br/>
   **Route :**/get_short_url <br/>
   **Request Format:** {long-url - String} <br/>
   **Response Format:** Success(status : 200) {"short-url" => "String"}
                        Invalid(status : 404) {"long url:" => "Invalid input"}
-=end 
+  **Sample :** 
+    **Request Body :**{"long_url" : "https://www.marvel.com/characters/spider-man-peter-parker"}
+    **Response Body:**{"short url": "aSb5Ik"}
+  **Host:** localhost:3000
+=end
+=begin 
   def get_short_url
     @url = Url.new(url_params)
     if @url.valid?
@@ -49,6 +57,30 @@ class UrlsController < ApplicationController
       end
     end
   end
+=end 
+#=begin
+  def get_short_url
+    @url = Url.new(url_params)
+    if @url.valid?
+      @url.long_url = NormalizeUrl.process(params[:url][:long_url])
+      @url.domain = (Domainatrix.parse(@url.long_url)).domain
+      @url_find = Url.find_by :domain => @url.domain, :long_url => @url.long_url
+      @url = @url_find.blank? ? @url.shorten_url : @url_find
+    end
+    respond_to do |format|
+      if @url.errors[:long_url].include?("is invalid")
+        @url=Url.new
+        flash[:danger] = 'Invalid Url' 
+        format.html{render :new ,:status=>404}
+        format.json {render json: {"long url:" => "Invalid input"}}
+      else
+        format.html { redirect_to(@url)  }
+        format.json{render json: {"short url" => @url.short_url}}
+      end
+    end
+  end 
+#=end
+
 =begin
   **Author:** Prabal Partap <br/>
   **Request Type:** GET <br/>
@@ -63,16 +95,21 @@ class UrlsController < ApplicationController
   **Route :**/urls/short_to_long_url<br/>
 =end 
   def short_to_long_url
-    flash[:notice]=""
     @url=Url.new
   end
 =begin
   **Author:** Prabal Partap <br/>
+  **Common-Name:** Process api get request for finding long url for a given short url
+  **End-points:** Other services
   **Request Type:** GET <br/>
   **Route :** /get_long_url <br/>
   **Request Format:** {short-url - String} <br/>
   **Response Format:** Success(status : 200) {"long-url" => "String"}
                        Invalid(status : 404) {"response:" => "No long url for this short url"}
+  **Sample :** 
+    **Request Body :**{"urls" : {"short url" : "PWlygg"} }
+    **Response Body:**{"response:": "No long url for this short url" }
+  **Host:** localhost:3000
 =end 
   def get_long_url
     @url=Url.new
@@ -93,13 +130,8 @@ class UrlsController < ApplicationController
       end
     end
   end
-
-
-
   private
     def url_params
       params.require(:url).permit(:long_url)
     end 
-
-
 end
